@@ -1,4 +1,5 @@
 from wxpy import *
+import pysnooper
 import random
 
 bot = Bot(cache_path=True)
@@ -17,7 +18,8 @@ class reply:
 class Turn:
     player1turn = True
     result = ""
-    switch = Falsecxdclass Points:
+    switch = False
+class Points:
     p1 = 0
     p2 = 0
 
@@ -46,7 +48,9 @@ def play_game(msg):
     elif "stop" in msg.text:
         msg.reply("You ended your turn! It is the other player's turn.")
         Turn.switch = True
-    
+ 
+
+@pysnooper.snoop("./log.log",variables=('Turn.player1turn'))
 def fish():    
     num = random.randint(1,6)
     
@@ -54,40 +58,40 @@ def fish():
         return (reply.uc, reply.fish1)
     
     elif num == 2:
-        return (reply.uc, reply.fish2)
         if Turn.player1turn:
             Points.p1 += 1
         else:
             Points.p2 += 1
+        return (reply.uc, reply.fish2)
         
     elif num == 3:
-        return (reply.uc, reply.fish3)
         if Turn.player1turn:
             Points.p1 += 3
         else:
             Points.p2 += 3
+        return (reply.uc, reply.fish3)
     
     elif num == 4:
-        return (reply.uc, reply.fish4)
         if Turn.player1turn:
             Points.p1 += 5
         else:
             Points.p2 += 5
+        return (reply.uc, reply.fish4)
     
     elif num == 5:
-        return (reply.uc, reply.fish5)
         if Turn.player1turn:
             Points.p1 += 10
         else:
             Points.p2 += 10
+        return (reply.uc, reply.fish5)
     
     else:
-        return (reply.uc, "an electric eel! You have zero points and your Turn is over.")
         if Turn.player1turn:
             Points.p1 = 0
         else:
             Points.p2 = 0
         Turn.switch = True
+        return (reply.uc, "an electric eel! You have zero points and your Turn is over.")
             
             
 embed()
